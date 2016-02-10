@@ -1,0 +1,4 @@
+MainStreet  Saloon  Trailers
+CastingOffice   Ranch   SecretHideOut
+Bank    Hotel   Church
+TrainStation    Jail    GeneralStore
