@@ -16,7 +16,7 @@ public class BoardController {
 		// add second text file to this method when completed.
 		// parseData(args[0], args[1]);
 		this.cardCollection = parseSceneCards(args[0]);
-		parseRooms(args[1]);
+		this.boardSections = parseRooms(args[1]);
 
 	}
 
@@ -25,16 +25,16 @@ public class BoardController {
 		ArrayList<SceneCard> sceneCards = new ArrayList<SceneCard>();
 		// ArrayList<Room> rooms = new ArrayList<Room>();
 		Scanner fileS = null;
-		// Scanner fileS2 = null;
+		// Scanner fileS = null;
 		try {
 	         fileS = new Scanner(new File(f1));
-			//  fileS2 = new Scanner(new File(f2));
+			//  fileS = new Scanner(new File(f2));
 	    }
 	    catch(FileNotFoundException e1) {
 	         System.err.println("FILE NOT FOUND: "+f1);
 	         System.exit(2);
 	    }
-		/* Parses Scenecards */
+		/* Parses SceneCards */
 		while (fileS.hasNextLine()) {
 			String line = fileS.nextLine();
 			Scanner lineData = new Scanner(line);
@@ -48,10 +48,11 @@ public class BoardController {
 			sceneCards.add(new SceneCard(roles, budget, id));
 			roles = new ArrayList<Role>();
 		}
+		return sceneCards;
 	}
 
 	private Collection<BoardSection> parseRooms(String f2) {
-		ArrayList<BoardSection> = new ArrayList<BoardSection>();
+		ArrayList<BoardSection> sections = new ArrayList<BoardSection>();
 		ArrayList<Role> roles = new ArrayList<Role>();
 		ArrayList<Room> rooms = new ArrayList<Room>();
 
@@ -64,8 +65,8 @@ public class BoardController {
 	         System.exit(2);
 	    }
 		/* Parses Rooms */
-		while (fileS2.hasNextLine()) {
-			String line = fileS2.nextLine();
+		while (fileS.hasNextLine()) {
+			String line = fileS.nextLine();
 			lineData = new Scanner(line);
 			String title = lineData.next();
 			if (title.equals("Trailers")) {
@@ -84,9 +85,17 @@ public class BoardController {
 				Scenecard card = pullCard();
 				rooms.add(new SceneRoom(title, shotCounters, roles, card));
 			}
-
 		}
+		ArrayList<Room> section1 = rooms.subList(0,2);
+		sections.add(new BoardSection(section1, "1"));
+		ArrayList<Room> section2 = rooms.subList(3,5);
+		sections.add(new BoardSection(section2, "2"));
+		ArrayList<Room> section3 = rooms.subList(6,8);
+		sections.add(new BoardSection(section3, "3"));
+		ArrayList<Room> section4 = rooms.subList(9,11);
+		sections.add(new BoardSection(section4, "4"));
 
+		return sections;
 	}
 
 	private SceneCard pullCard() {
