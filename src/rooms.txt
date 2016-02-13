@@ -1,0 +1,12 @@
+MainStreet 3 1 2 2 4
+Saloon 2 2 1 
+Trailers
+CastingOffice   
+Ranch 2 3 2 1   
+SecretHideOut 3 1 2 3 4
+Bank 1 3 2   
+Hotel 3 1 1 2 3   
+Church 2 1 2
+TrainStation 3 1 1 2 4   
+Jail 1 2 3   
+GeneralStore 2 1 3
