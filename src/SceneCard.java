@@ -1,11 +1,13 @@
 public class SceneCard{
-	public int budget;
+	private int budget;
 	//public String text;
-	public ArrayList<Role> sceneCards;
+	private ArrayList<Role> starringRoles;
+	private String id;
 
-	public SceneCard(ArrayList<Role> sceneCards, int budget){
-		this.sceneCards = sceneCards;
+	public SceneCard(ArrayList<Role> starringRoles, int budget, int id){
+		this.starringRoles = starringRoles;
 		this.budget = budget;
+		this.id = String.valueOf(id);
 	}
 
 	//public void flipSceneCard(){
