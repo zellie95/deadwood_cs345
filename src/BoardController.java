@@ -13,10 +13,9 @@ public class BoardController {
 	         System.err.println("USAGE: <rooms.txt> <RoleSceneCards.txt>");
 	         System.exit(1);
 	    }
-
-		ArrayList<SceneCard> cardCollection = parseSceneCards(args[0]);
+		ArrayList<SceneCard> cardCollection = parseSceneCards(args[1]);
 		setCardCollection(cardCollection);
-		ArrayList<BoardSection> boardSections = parseRooms(args[1]);
+		ArrayList<BoardSection> boardSections = parseRooms(args[0]);
 		setBoardSections(boardSections);
 
 	}
@@ -42,8 +41,7 @@ public class BoardController {
 		ArrayList<SceneCard> sceneCards = new ArrayList<>();
 		Scanner fileS = null;
 		try {
-			File f = new File(f1);
-			fileS = new Scanner(f);
+			fileS = new Scanner(new File(f1));
 		}
 	    catch(FileNotFoundException e1) {
 	         System.err.println("FILE NOT FOUND: "+f1);
@@ -53,13 +51,12 @@ public class BoardController {
 		while (fileS.hasNextLine()) {
 			String line = fileS.nextLine();
 			Scanner lineData = new Scanner(line);
-			int id = lineData.nextInt();
+			String id = lineData.next();
 			int budget = lineData.nextInt();
-			while (lineData.hasNext()) {
+			while (lineData.hasNextInt()) {
 				int rank = lineData.nextInt();
 				roles.add(new StarringRole(rank));
 			}
-			// SceneCard sc1 = new SceneCard(roles, budget, id);
 			sceneCards.add(new SceneCard(roles, budget, id));
 			roles = new ArrayList<>(); //Role
 		}
@@ -85,10 +82,8 @@ public class BoardController {
 			Scanner lineData = new Scanner(line);
 			String title = lineData.next();
 			if (title.equals("Trailers")) {
-				// Room trailer = new TrailerRoom(title);
 				rooms.add(new Trailer(title));
 			} else if (title.equals("CastingOffice")) {
-				// Room castingOffice = new CastingOffice(title);
 				rooms.add(new CastingOffice(title));
 			} else {
 				int shotCounters = lineData.nextInt();
@@ -101,13 +96,13 @@ public class BoardController {
 				rooms.add(new SceneRoom(title, shotCounters, roles, card));
 			}
 		}
-		ArrayList<Room> section1 = new ArrayList<>(rooms.subList(0, 2));
+		ArrayList<Room> section1 = new ArrayList<>(rooms.subList(0, 3));
 		sections.add(new BoardSection(section1, "1"));
-		ArrayList<Room> section2 = new ArrayList<>(rooms.subList(3,5));
+		ArrayList<Room> section2 = new ArrayList<>(rooms.subList(3,6));
 		sections.add(new BoardSection(section2, "2"));
-		ArrayList<Room> section3 = new ArrayList<>(rooms.subList(6,8));
+		ArrayList<Room> section3 = new ArrayList<>(rooms.subList(6,9));
 		sections.add(new BoardSection(section3, "3"));
-		ArrayList<Room> section4 = new ArrayList<>(rooms.subList(9,11));
+		ArrayList<Room> section4 = new ArrayList<>(rooms.subList(9,12));
 		sections.add(new BoardSection(section4, "4"));
 
 		return sections;

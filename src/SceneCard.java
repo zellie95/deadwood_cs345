@@ -6,10 +6,10 @@ public class SceneCard {
 	private ArrayList<Role> starringRoles;
 	private String id;
 
-	public SceneCard(ArrayList<Role> starringRoles, int budget, int id) {
+	public SceneCard(ArrayList<Role> starringRoles, int budget, String id) {
 		this.starringRoles = starringRoles;
 		this.budget = budget;
-		this.id = String.valueOf(id);
+		this.id = id;
 	}
 
 	//public void flipSceneCard(){
