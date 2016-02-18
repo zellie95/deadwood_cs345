@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class SceneCard {
 	private int budget;
 	//public String text;
