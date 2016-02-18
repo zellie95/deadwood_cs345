@@ -116,4 +116,16 @@ public class BoardController {
 		return card;
 	}
 
+	private static void userChoosesMove(int moveChoice){
+		switch(moveChoice){
+			case 1: 
+				Actor.move(Room room);
+				break;
+
+			case 2: case 3:
+				Actor.setRole();
+
+		}
+	}
+
 }

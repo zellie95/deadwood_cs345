@@ -39,7 +39,7 @@ public class UI{
 
 	}
 
-	public void chooseAMoveNotInARole(){
+	public static void chooseAMoveNotInARole(){
 		System.out.println("Choose a move: \n
 							1) Move to a different room \n
 							2) Take a starring role \n
@@ -50,7 +50,7 @@ public class UI{
 		BoardController.playerChoice(choice);
 	}
 
-	public void chooseAMoveInTrailers(){
+	public static void chooseAMoveInTrailers(){
 		System.out.println("Choose a move: \n
 							1) Move to a different room");
 		Scanner inputInTrailers = new Scanner(System.in);
@@ -58,7 +58,7 @@ public class UI{
 		BoardController.playerChoice(choice);
 	}
 
-	public void chooseAMoveInCastingOffice(){
+	public static void chooseAMoveInCastingOffice(){
 		System.out.println("Choose a move: \n
 							1) Move to a different room \n
 							2) Upgrade rank");
