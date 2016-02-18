@@ -22,6 +22,7 @@ public class UI{
 		Controller.setDays(players);
 		int days = Controller.getDays();
 		message("There will be ", days, " days that you will be playing.");
+		
 
 	}
 
@@ -40,11 +41,30 @@ public class UI{
 
 	public void chooseAMoveNotInARole(){
 		System.out.println("Choose a move: \n
-							1) Move to a different scene room \n
+							1) Move to a different room \n
 							2) Take a starring role \n
 							3) Take an extra role")
 
-		Scanner input
+		Scanner inputInARole = new Scanner(System.in);
+		int choice = inputInARole.nextInt();
+		BoardController.playerChoice(choice);
+	}
+
+	public void chooseAMoveInTrailers(){
+		System.out.println("Choose a move: \n
+							1) Move to a different room");
+		Scanner inputInTrailers = new Scanner(System.in);
+		int choice = inputInTrailers.nextInt();
+		BoardController.playerChoice(choice);
+	}
+
+	public void chooseAMoveInCastingOffice(){
+		System.out.println("Choose a move: \n
+							1) Move to a different room \n
+							2) Upgrade rank");
+		Scanner inputInCastingOffice = new Scanner(System.in);
+		int choice = inputInCastingOffice.nextInt();
+		BoardController.playerChoice(choice);
 	}
 
 	private void welcomeToDeadwood(){
