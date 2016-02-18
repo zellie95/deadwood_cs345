@@ -16,4 +16,14 @@ public class SceneRoom extends Room {
 	public ArrayList<Role> getExtraRoles() {
 		return extraRoles;
 	}
+
+	public int removeShotCounters(){
+		if (shotCounters > 0){
+			shotCounters = shotCounters - 1;
+		}
+		else{
+			
+		}
+
+	}
 }
