@@ -5,7 +5,7 @@ public class Wallet {
     int dollars;
     int credits;
 
-    private Wallet(int dollars, int credits) {
+    public Wallet(int dollars, int credits) {
         this.dollars = dollars;
         this.credits = credits;
     }

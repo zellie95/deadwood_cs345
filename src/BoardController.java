@@ -5,6 +5,7 @@ import java.util.*;
 public class BoardController {
 	private static List<SceneCard> cardCollection;
 	private static List<BoardSection> boardSections;
+	private static Queue<Actor> playerQ;
 	private static Random randomGenerator;
 
 	public static void main(String[] args) {
@@ -18,7 +19,18 @@ public class BoardController {
 		ArrayList<BoardSection> boardSections = parseRooms(args[0], args[2]);
 		setBoardSections(boardSections);
 
+		UI.start();
+
 	}
+
+	public static Queue<Actor> getPlayerQ() {
+		return playerQ;
+	}
+
+	public static void setPlayerQ(LinkedList<Actor> playerQ) {
+		BoardController.playerQ = playerQ;
+	}
+
 
 	private static void setBoardSections(ArrayList<BoardSection> bs) {
 		boardSections = bs;
