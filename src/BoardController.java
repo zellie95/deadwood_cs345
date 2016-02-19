@@ -65,9 +65,42 @@ public class BoardController {
 			Scanner lineData = new Scanner(line);
 			String id = lineData.next();
 			int budget = lineData.nextInt();
-			while (lineData.hasNextInt()) {
+			while (lineData.hasNext()) {
 				int rank = lineData.nextInt();
-				roles.add(new StarringRole(rank));
+				String title = lineData.next();
+				/*Splits strings at '+' to ensure they are formatted properly AND all the data is read as one string
+				 * by the scanner. */
+				if (title.contains("+")) {
+					String[] split_title = title.split("\\+");
+					StringBuilder builder = new StringBuilder();
+					for (String s : split_title) {
+						builder.append(s);
+						builder.append(" ");
+					}
+					title = builder.toString();
+//					System.out.println(title);
+				} /*else {
+					System.out.println(title);
+				}*/
+
+				String catch_phrase = lineData.next();
+
+				if (catch_phrase.contains("+")) {
+					String[] split_catch_phrase = catch_phrase.split("\\+");
+					StringBuilder builder = new StringBuilder();
+					builder.append('"');
+					for (String s : split_catch_phrase) {
+						builder.append(s);
+						builder.append(" ");
+					}
+					builder.append('"');
+					catch_phrase = builder.toString();
+					System.out.println(catch_phrase);
+				} else {
+					catch_phrase = '"' + catch_phrase + '"';
+//					System.out.println(catch_phrase);
+				}
+				roles.add(new StarringRole(rank, title, catch_phrase));
 			}
 			sceneCards.add(new SceneCard(roles, budget, id));
 			roles = new ArrayList<>(); //Role
@@ -127,7 +160,9 @@ public class BoardController {
 				int shotCounters = roomData.nextInt();
 				while (roomData.hasNext()) {
 					int rank = roomData.nextInt();
-					roles.add(new ExtraRole(rank));
+					String roleTitle = roomData.next();
+					String catch_phrase = roomData.next();
+					roles.add(new ExtraRole(rank, roleTitle, catch_phrase));
 				}
 				while (adjData.hasNext()) {
 					String room = adjData.next();

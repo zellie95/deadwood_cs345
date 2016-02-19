@@ -1,40 +1,40 @@
-﻿1 4 2 3 4
-2 6 2 4 6
-3 3 1 2 5
-4 4 4 6
-5 5 5 6
-6 4 2 4 5
-7 5 3 4 6
-8 3 1 3 5
-9 4 2 3 5
-10 4 1 2 4
-11 4 1 4 5
-12 5 2 4 5
-13 2 6
-14 3 2 3 4
-15 3 3 6
-16 3 1 3 4
-17 2 3 4
-18 3 4 6
-19 2 2 4
-20 5 3 5 6
-21 6 4 5 6
-22 6 1 2 5
-23 5 2 4 5
-24 5 1 3 5
-25 6 5 6
-26 4 2 3 4
-27 2 3 5 
-28 5 2 3 5
-29 5 1 4 6
-30 4 2 3 4
-31 4 5 6
-32 4 1 2 5
-33 6 1 3 5
-34 5 2 4 6
-35 6 3 5 6
-36 4 4 5 6
-37 4 2 4 5
-38 3 2 6
-39 5 3 4 5
-40 5 2 4 6
+﻿1 4 2  Defrocked+Priest    Look+out+below!  3  Marshal+Canfield   Hold+fast!  4  One-Eyed+Man   Balderdash! 
+2 6 2  Squeaking+Boy   I’ll+say!  4  Pharaoh+Imhotep   Attack,+soldiers!   6  Aunt+Martha   You+got+nothin’! 
+3 3 1  Rug+Merchant   Don’t+leave+my+store!   2  Banker   Trust+me.   5  Talking+Mule   Nice+work,+Johnny! 
+4 4 4  The+Duck   Waaaak!  6  His+Brother   Waaaaaaak! 
+5 5 5  Auctioneer   Going+once!  6  General+Custer   Go+West! 
+6 4 2  Town+Drunk   Even+me!  4  Squinting+Miner   Sure+we+can!  5  Poltergeist   Wooooo! 
+7 5 3  Drunk   Where’s+Willard?  4  Librarian   Shhhhh!   6  Man+with+Hay   Hey! 
+8 3 1  Angry+Barber   Hold+him+still!  3  Woman+with+Board   Nonsense,+Frank!   5  Man+on+Fire   It+burns! 
+9 4 2  Hollering+Boy    Over+here,+mister!  3  Drunk+Farmer   Git+outta+me+barn!   5  Meek+Little+Sarah   He’s+so+cute! 
+10 4 1  Sleeping+Man   Snnkkk+snnkk+snnkk.   2  Man+with+Pig    Tally-Hooo!  4  Shooter   Where’s+my+britches? 
+11 4 1  Buster   One+two+three+go!  4  Man+Reading+Paper   Ouchie!   5  Fat+Pete   Nice+kick,+boss! 
+12 5 2  Shot+in+Back   Arrrggh!  4  Shot+in+Leg   Ooh,+lordy!  5  Leaps+into+Cake   Dangit,+Jesse! 
+13 2 6  Martin   Have+you+tried+soy+cheese? 
+14 3 2  Piano+Player   It’s+a+nocturne!  3  Man+in+Turban   My+stars!  4  Falls+on+Hoe   Ow! 
+15 3 3  Preacher   My+word!  6  Amused+Witness   Tee+hee+hee! 
+16 3 1  Falls+from+Tree   What+ho!  3  Laughing+Woman    ‘Tis+to+laugh!  4  Man+with+Whistle   Tweeeeet! 
+17 2 3  Curious+Girl   Are+you+sure?   4  Ghost+of+Plato   It+happened+to+me! 
+18 3 4  Ex-Convict    Never+again!  6  Man+with+Onion   Fresh+onions! 
+19 2 2  Surprised+Bison   Mmrrrrrph!  4  Man+with+Horn   Ta+daaaa! 
+20 5 3  Staggering+Man   You+never+know!   5  Woman+with+Beer    Howdy,+stranger!  6  Marcie   Welcome+home! 
+21 6 4  Looks+like+Elvis    Thankyouverymuch.  5  Singing+Dead+Man   Yeah!  6  Apothecary   Such+drugs+I+have. 
+22 6 1  Flustered+Man   Well,+I+never!  2  Space+Monkey   Ook!   5  Cowbot+Dan   Bzzzzzt! 
+23 5 2  Jailer   You+there!  4  Mephistopheles   Be+not+afraid!  5  Breaks+a+Window   Oops! 
+24 5 1  Man+in+Poncho   Howdy,+Jones!  3  Ecstatic+Housewife   This+is+fine!   5  Isaac   The+mail! 
+25 6 5  Film+Critic   Implausible!  6  Hobo+with+Bat   Nice+house! 
+26 4 2  Cow   Moo.  3  St.+Clement+of+Alexandria   Peace+be+with+you,+child!  4  Josie   Yikes! 
+27 2 3  Bewhisker’d+Cowpoke   Oh,+sweet+Lord!   5  Dog   Wurf! 
+28 5 2  Willard   Ain’t+that+a+sight?  3  Leprechaun   Begorrah!  5  Startled+Ox   Mrr? 
+29 5 1  Shot+in+Head   Arrrgh!  4  Leaps+Out+of+Cake   Oh,+for+Pete’s+sake!  6  Shot+Three+Times   Ow!+Ow!+Ow! 
+30 4 2  Voice+of+God   Grab+hold,+son!  3  Hands+of+God   !  4  Jack+Kemp   America! 
+31 4 5  Opice+(Monkey)   Ukk!+(Ook)!  6  Man+with+Gun   Hold+it+right+there! 
+32 4 1  Man+with+Rope   Look+out+below!  2  Svetlana    Says+who?  5  Accidental+Victim    Ow!+My+spine! 
+33 6 1  Thrifty+Mike   Call!  3  Sober+Physician   Raise!  5  Man+on+Floor   Fold! 
+34 5 2  Very+Wet+Man   Sheesh!  4  Dejected+Housewife   Its+time+had+come.   6  Man+with+Box   Progress! 
+35 6 3  Liberated+Nun   Let+me+have+it!   5  Witch+Doctor   Oogie+Boogie!  6  Voice+of+Reason   Come+on,+now! 
+36 4 4  Marksman   Pull!  5  Postal+Worker   It’s+about+time!  6  A+Horse   Yes+Sir! 
+37 4 2  Burning+Man   Make+it+stop!   4  Cheese+Vendor   Opa!   5  Hit+with+Table   Ow!+A+table? 
+38 3 2  Fraternity+Pledge   Beer+me!  6  Man+with+Sword   None+shall+pass! 
+39 5 3  Detective   I+have+a+hunch.  4  File+Clerk    My+stapler!  5  Cindy+Lou   Dear+Lord! 
+40 5 2  Farmer   Git+off+a+that!  4  Exploding+Horse   Boom!  6  Jack   Here+we+go+again! 
