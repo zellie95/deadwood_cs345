@@ -7,8 +7,8 @@ import java.lang.Object;
 
 public class CastingOffice extends Room {
 
-    public CastingOffice(String title) {
-        super(title);
+    public CastingOffice(String title, ArrayList<String> adjRooms) {
+        super(title, adjRooms);
     }
 
     public HashMap<Integer, Integer[]> upgradeHash = new HashMap<Integer, Integer[]>();

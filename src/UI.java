@@ -1,3 +1,4 @@
+/*
 import java.util.*;
 
 public class UI{
@@ -74,4 +75,4 @@ public class UI{
 	private void message(String format, Object... args){
 		output.println(String.format(format, args));
 	}
-}
+}*/

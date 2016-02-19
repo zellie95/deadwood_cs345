@@ -9,13 +9,13 @@ public class BoardController {
 
 	public static void main(String[] args) {
 		/* Bad idea, but leave for now. */
-		if(args.length != 2) {
-	         System.err.println("USAGE: <rooms.txt> <RoleSceneCards.txt>");
+		if(args.length != 3) {
+	         System.err.println("USAGE: <rooms.txt> <RoleSceneCards.txt> <adjacentRoomsList.txt");
 	         System.exit(1);
 	    }
 		ArrayList<SceneCard> cardCollection = parseSceneCards(args[1]);
 		setCardCollection(cardCollection);
-		ArrayList<BoardSection> boardSections = parseRooms(args[0]);
+		ArrayList<BoardSection> boardSections = parseRooms(args[0], args[2]);
 		setBoardSections(boardSections);
 
 	}
@@ -63,11 +63,13 @@ public class BoardController {
 		return sceneCards;
 	}
 
-	private static ArrayList<BoardSection> parseRooms(String f2) {
+	private static ArrayList<BoardSection> parseRooms(String f2, String f3) {
 		ArrayList<BoardSection> sections = new ArrayList<>(); //BoardSection
 		ArrayList<Role> roles = new ArrayList<>(); //Role
 		ArrayList<Room> rooms = new ArrayList<>(); //Room
+		ArrayList<String> adjRooms = new ArrayList<>();
 
+		/* <rooms.txt> scanner */
 		Scanner fileS = null;
 		try {
 	         fileS = new Scanner(new File(f2));
@@ -76,34 +78,64 @@ public class BoardController {
 	         System.err.println("FILE NOT FOUND: "+f2);
 	         System.exit(2);
 	    }
+		/* <adjacentRoomsList.txt> scanner */
+		Scanner adjS = null;
+		try {
+			adjS = new Scanner(new File(f3));
+		}
+		catch(FileNotFoundException e1) {
+			System.err.println("FILE NOT FOUND: "+f3);
+			System.exit(2);
+		}
 		/* Parses Rooms */
-		while (fileS.hasNextLine()) {
-			String line = fileS.nextLine();
-			Scanner lineData = new Scanner(line);
-			String title = lineData.next();
+		while (fileS.hasNextLine() && adjS.hasNextLine()) {
+			String adjLine = adjS.nextLine();
+			String roomLine = fileS.nextLine();
+
+			/* Two scanners to read room data and adjacent rooms data concurrently. */
+			Scanner roomData = new Scanner(roomLine);
+			Scanner adjData = new Scanner(adjLine);
+			String adjTitle = adjData.next();
+			String title = roomData.next();
 			if (title.equals("Trailers")) {
-				rooms.add(new Trailer(title));
+				while (adjData.hasNext()) {
+					String room = adjData.next();
+					adjRooms.add(room);
+				}
+				rooms.add(new Trailer(title,adjRooms));
+				adjRooms = new ArrayList<>();
 			} else if (title.equals("CastingOffice")) {
-				rooms.add(new CastingOffice(title));
+				while (adjData.hasNext()) {
+					String room = adjData.next();
+					adjRooms.add(room);
+				}
+				rooms.add(new CastingOffice(title,adjRooms));
+				adjRooms = new ArrayList<>();
 			} else {
-				int shotCounters = lineData.nextInt();
-				while (lineData.hasNext()) {
-					int rank = lineData.nextInt();
+				int shotCounters = roomData.nextInt();
+				while (roomData.hasNext()) {
+					int rank = roomData.nextInt();
 					roles.add(new ExtraRole(rank));
+				}
+				while (adjData.hasNext()) {
+					String room = adjData.next();
+					adjRooms.add(room);
 				}
 				/* Grab random scene card */
 				SceneCard card = pullCard();
-				rooms.add(new SceneRoom(title, shotCounters, roles, card));
+				rooms.add(new SceneRoom(title, shotCounters, roles, card, adjRooms));
+				roles = new ArrayList<>(); //Role
+				adjRooms = new ArrayList<>();
 			}
 		}
 		ArrayList<Room> section1 = new ArrayList<>(rooms.subList(0, 3));
-		sections.add(new BoardSection(section1, "1"));
+		sections.add(new BoardSection(section1, "2"));
 		ArrayList<Room> section2 = new ArrayList<>(rooms.subList(3,6));
-		sections.add(new BoardSection(section2, "2"));
+		sections.add(new BoardSection(section2, "3"));
 		ArrayList<Room> section3 = new ArrayList<>(rooms.subList(6,9));
-		sections.add(new BoardSection(section3, "3"));
+		sections.add(new BoardSection(section3, "4"));
 		ArrayList<Room> section4 = new ArrayList<>(rooms.subList(9,12));
-		sections.add(new BoardSection(section4, "4"));
+		sections.add(new BoardSection(section4, "1"));
 
 		return sections;
 	}
@@ -116,16 +148,16 @@ public class BoardController {
 		return card;
 	}
 
-	private static void userChoosesMove(int moveChoice){
-		switch(moveChoice){
-			case 1: 
-				Actor.move(Room room);
-				break;
-
-			case 2: case 3:
-				Actor.setRole();
-
-		}
-	}
+//	private static void userChoosesMove(int moveChoice){
+//		switch(moveChoice){
+//			case 1:
+//				Actor.move(Room room);
+//				break;
+//
+//			case 2: case 3:
+//				Actor.setRole();
+//
+//		}
+//	}
 
 }
