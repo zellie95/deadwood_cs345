@@ -2,6 +2,8 @@
  * Created by zazulam on 2/13/16.
  */
 public class Actor {
+
+
     private Wallet wallet;
     private int rank;
     private int playerID;
@@ -22,7 +24,13 @@ public class Actor {
 //        int rolledDie = Dice.rollDice(shotBonus);
 //        return rolledDie;
 //    }
+    public Wallet getWallet() {
+        return wallet;
+    }
 
+    public void setWallet(Wallet wallet) {
+        this.wallet = wallet;
+    }
     public int reherse(){
         shotBonus += 1;
         return shotBonus;

@@ -7,6 +7,8 @@ public class BoardController {
 	private static List<BoardSection> boardSections;
 	private static Queue<Actor> playerQ;
 	private static Random randomGenerator;
+	private static int days = 0;
+
 
 	public static void main(String[] args) {
 		/* Bad idea, but leave for now. */
@@ -20,17 +22,55 @@ public class BoardController {
 		setBoardSections(boardSections);
 
 		UI.start();
+		while(getDays() != 0){
 
+		}
+
+	}
+
+	public static int getDays() {
+		return days;
+	}
+
+	public static void setDays(int days) {
+
+		if ((days == 2) || (days == 3)){
+			BoardController.days = 3;
+		} else if (days == 4){
+			BoardController.days = 4;
+
+		} else if (days == 5){
+			BoardController.days = 4;
+			for (Actor a: playerQ){
+				setActorCredits(a, 2);
+			}
+		} else if (days == 6){
+			BoardController.days = 4;
+			for (Actor a: playerQ){
+				setActorCredits(a, 4);
+			}
+		} else {
+			BoardController.days = 4;
+			for (Actor a: playerQ){
+				a.setRank(2);
+			}
+		}
+
+	}
+
+	public static void setActorCredits(Actor actor, int credits){
+		 actor.getWallet().incCredits(credits);
+	}
+
+	public static void setActorDollars(Actor actor, int dollars){
+		actor.getWallet().incDollars(dollars);
 	}
 
 	public static Queue<Actor> getPlayerQ() {
 		return playerQ;
 	}
 
-	public static void setPlayerQ(LinkedList<Actor> playerQ) {
-		BoardController.playerQ = playerQ;
-	}
-
+	public static void setPlayerQ(LinkedList<Actor> playerQ) { BoardController.playerQ = playerQ; }
 
 	private static void setBoardSections(ArrayList<BoardSection> bs) {
 		boardSections = bs;
@@ -68,8 +108,8 @@ public class BoardController {
 			while (lineData.hasNext()) {
 				int rank = lineData.nextInt();
 				String title = lineData.next();
-				/*Splits strings at '+' to ensure they are formatted properly AND all the data is read as one string
-				 * by the scanner. */
+		/*Splits strings at '+' to ensure they are formatted properly AND all the data is read as one string
+		 * by the scanner. */
 				if (title.contains("+")) {
 					String[] split_title = title.split("\\+");
 					StringBuilder builder = new StringBuilder();
@@ -78,10 +118,7 @@ public class BoardController {
 						builder.append(" ");
 					}
 					title = builder.toString();
-//					System.out.println(title);
-				} /*else {
-					System.out.println(title);
-				}*/
+				}
 
 				String catch_phrase = lineData.next();
 
@@ -95,10 +132,8 @@ public class BoardController {
 					}
 					builder.append('"');
 					catch_phrase = builder.toString();
-					System.out.println(catch_phrase);
 				} else {
 					catch_phrase = '"' + catch_phrase + '"';
-//					System.out.println(catch_phrase);
 				}
 				roles.add(new StarringRole(rank, title, catch_phrase));
 			}
@@ -161,12 +196,34 @@ public class BoardController {
 				while (roomData.hasNext()) {
 					int rank = roomData.nextInt();
 					String roleTitle = roomData.next();
-					String catch_phrase = roomData.next();
-					roles.add(new ExtraRole(rank, roleTitle, catch_phrase));
-				}
-				while (adjData.hasNext()) {
-					String room = adjData.next();
-					adjRooms.add(room);
+			/*Splits strings at '+' to ensure they are formatted properly AND all the data is read as one string
+			 * by the scanner. */
+					if (roleTitle.contains("+")) {
+						String[] split_title = roleTitle.split("\\+");
+						StringBuilder builder = new StringBuilder();
+
+						for (String s : split_title) {
+							builder.append(s);
+							builder.append(" ");
+						}
+						roleTitle = builder.toString();
+						String catch_phrase = roomData.next();
+						if (catch_phrase.contains("+")) {
+							String[] split_phrase = catch_phrase.split("\\+");
+							builder = new StringBuilder();
+
+							for (String s : split_phrase) {
+								builder.append(s);
+								builder.append(" ");
+							}
+							catch_phrase = builder.toString();
+							roles.add(new ExtraRole(rank, roleTitle, catch_phrase));
+						}
+						while (adjData.hasNext()) {
+							String room = adjData.next();
+							adjRooms.add(room);
+						}
+					}
 				}
 				/* Grab random scene card */
 				SceneCard card = pullCard();

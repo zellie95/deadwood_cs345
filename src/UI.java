@@ -41,6 +41,8 @@ public class UI {
 		 System.out.println("Randomizing player order...");
 		 Collections.shuffle(playerQ);
 		 BoardController.setPlayerQ(playerQ);
+		 BoardController.setDays(input);
+
 	 }
 
 //	public void askPlayers(){
