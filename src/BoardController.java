@@ -8,6 +8,7 @@ public class BoardController {
 	private static Queue<Actor> playerQ;
 	private static Random randomGenerator;
 	private static int days = 0;
+	private static int moviesLeft = 0;
 
 
 	public static void main(String[] args) {
@@ -22,11 +23,121 @@ public class BoardController {
 		setBoardSections(boardSections);
 
 		UI.start();
-		while(getDays() != 0){
-
+		while(getDays() != 0) {
+			playerTurn();
 		}
 
 	}
+
+	public static void playerTurn() {
+		Actor curr = playerQ.remove();
+		String position = curr.getBoardPosition();
+		Boolean roleStatus = curr.getRoleStatus();
+		int caseArg;
+		Room currRoom = null;
+		// Boolean to break for each loops
+		boolean breakLoop = false;
+		//Player X's turn.
+		System.out.println("Player "+curr.getPlayerID()+"'s turn.\n");
+		for (BoardSection b : boardSections) {
+			for (Room r : b.getRoomObjects()) {
+				if ((r.getTitle()).equals(position)) {
+					currRoom = r;
+					breakLoop = true;
+					break;
+				}
+			}
+			if (breakLoop = true) {
+				break;
+			}
+		}
+		breakLoop = false;
+		if ((roleStatus == false) && !position.equals("CastingOffice")) {
+			caseArg = 1;
+		} else if (roleStatus == true) {
+			caseArg = 2;
+		} else {
+			caseArg = 3;
+		}
+
+		switch(caseArg){
+			case 1:
+				/* Not in a role or not in CastingOffice
+				*
+				*
+				*
+				* */
+				if ((currRoom instanceof SceneRoom) && (((SceneRoom) currRoom).getMovieStatus()) == true) {
+					String roleChoice = UI.roleCheck();
+					ArrayList<StarringRole> starringRoles = new ArrayList<>();
+					ArrayList<ExtraRole> extraRoles = new ArrayList<>();
+					int budget = 0;
+
+					if (roleChoice.equals("y")) {
+						for (BoardSection b : boardSections) {
+							for (Room r : b.getRoomObjects()) {
+								if ((r.getTitle()).equals(position)) {
+									SceneRoom sr = (SceneRoom) r;
+									for (ExtraRole e : sr.getExtraRoles()) {
+										if (e.getRank() <= curr.getRank()) {
+											extraRoles.add(e);
+										}
+									}
+									SceneCard sceneCard = sr.getSceneCard();
+									budget = sceneCard.getBudget();
+									for (StarringRole s : sceneCard.getStarringRoles()) {
+										if (s.getRank() <= curr.getRank()) {
+											starringRoles.add(s);
+										}
+									}
+									breakLoop = true;
+									break;
+								}
+							}
+							if (breakLoop = true) {
+								break;
+							}
+						}
+						breakLoop = false;
+					}
+					roleChoice = UI.roleChoose(extraRoles, starringRoles, budget);
+				}
+
+				//User has choosen to not take a role, or they are in a board position that doesn't have any roles.
+				//
+				//
+				//
+				String moveChoice = UI.moveCheck();
+				if (moveChoice.equals("a")) {
+					for (BoardSection b : boardSections) {
+						for (Room r : b.getRoomObjects()) {
+							if ((r.getTitle()).equals(position)) {
+								ArrayList<String> adjRooms = r.getAdjacentRooms();
+								String choice = UI.moveTo(adjRooms);
+								curr.setBoardPosition(choice);
+								breakLoop = true;
+								break;
+							}
+						}
+						if (breakLoop = true) {
+							break;
+						}
+					}
+					breakLoop = false;
+				} else if (moveChoice.equals("b")) {
+					UI.printPlayerStatus(curr);
+				} else {
+
+				}
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+		}
+
+		}
+
 
 	public static int getDays() {
 		return days;
@@ -55,7 +166,16 @@ public class BoardController {
 				a.setRank(2);
 			}
 		}
+		BoardController.setMoviesLeft(10);
 
+	}
+
+	public static int getMoviesLeft() {
+		return moviesLeft;
+	}
+
+	public static void setMoviesLeft(int moviesLeft) {
+		BoardController.moviesLeft = moviesLeft;
 	}
 
 	public static void setActorCredits(Actor actor, int credits){
@@ -89,7 +209,7 @@ public class BoardController {
 	}
 
 	private static ArrayList<SceneCard> parseSceneCards(String f1) {
-		ArrayList<Role> roles = new ArrayList<>();
+		ArrayList<StarringRole> roles = new ArrayList<>();
 		ArrayList<SceneCard> sceneCards = new ArrayList<>();
 		Scanner fileS = null;
 		try {
@@ -145,7 +265,7 @@ public class BoardController {
 
 	private static ArrayList<BoardSection> parseRooms(String f2, String f3) {
 		ArrayList<BoardSection> sections = new ArrayList<>(); //BoardSection
-		ArrayList<Role> roles = new ArrayList<>(); //Role
+		ArrayList<ExtraRole> roles = new ArrayList<>(); //Role
 		ArrayList<Room> rooms = new ArrayList<>(); //Room
 		ArrayList<String> adjRooms = new ArrayList<>();
 

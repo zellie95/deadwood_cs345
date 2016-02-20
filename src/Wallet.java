@@ -15,6 +15,23 @@ public class Wallet {
         dollars += dollars;
 
     }
+
+    public int getDollars() {
+        return dollars;
+    }
+
+    public void setDollars(int dollars) {
+        this.dollars = dollars;
+    }
+
+    public int getCredits() {
+        return credits;
+    }
+
+    public void setCredits(int credits) {
+        this.credits = credits;
+    }
+
     public void incCredits(int credit) {
         credits += credit;
 
@@ -28,4 +45,5 @@ public class Wallet {
         credits -= credit;
 
     }
+
 }

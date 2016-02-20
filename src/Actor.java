@@ -10,6 +10,7 @@ public class Actor {
     private String boardPosition;
     private boolean roleStatus;
     private int shotBonus;
+    private Role role;
 
     public Actor(int playerID){
         this.wallet = new Wallet(0, 0);
@@ -18,12 +19,28 @@ public class Actor {
         this.boardPosition = "Trailers";
         this.roleStatus = false;
         this.shotBonus = 0;
+        this.role = null;
+
     }
+
 
 //    public int act(){
 //        int rolledDie = Dice.rollDice(shotBonus);
 //        return rolledDie;
 //    }
+
+
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+
+
     public Wallet getWallet() {
         return wallet;
     }
@@ -34,6 +51,14 @@ public class Actor {
     public int reherse(){
         shotBonus += 1;
         return shotBonus;
+    }
+
+    public int getPlayerID() {
+        return playerID;
+    }
+
+    public void setPlayerID(int playerID) {
+        this.playerID = playerID;
     }
 
     public void movePlayer(String roomx){
