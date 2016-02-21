@@ -35,99 +35,92 @@ public class BoardController {
 		Boolean roleStatus = curr.getRoleStatus();
 		int caseArg;
 		Room currRoom = null;
+
 		// Boolean to break for each loops
 		boolean breakLoop = false;
+
 		//Player X's turn.
 		System.out.println("Player "+curr.getPlayerID()+"'s turn.\n");
-		for (BoardSection b : boardSections) {
-			for (Room r : b.getRoomObjects()) {
-				if ((r.getTitle()).equals(position)) {
-					currRoom = r;
-					breakLoop = true;
-					break;
-				}
-			}
-			if (breakLoop = true) {
-				break;
-			}
-		}
-		breakLoop = false;
+
+//		/*Pause for 1 second*/
+//		try {
+//			Thread.sleep(200);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+
+		currRoom = getCurrRoom(position);
+
+		/* Not in a role or not in CastingOffice */
 		if ((roleStatus == false) && !position.equals("CastingOffice")) {
 			caseArg = 1;
+		/* Player is currently in a role */
 		} else if (roleStatus == true) {
 			caseArg = 2;
+		/* In the casting office currently */
 		} else {
 			caseArg = 3;
 		}
 
-		switch(caseArg){
+		switch(caseArg) {
 			case 1:
-				/* Not in a role or not in CastingOffice
-				*
-				*
-				*
-				* */
+				boolean b = false;
+				// If checks if player is in a scene room and if a movie is still in production.
 				if ((currRoom instanceof SceneRoom) && (((SceneRoom) currRoom).getMovieStatus()) == true) {
-					String roleChoice = UI.roleCheck();
-					ArrayList<StarringRole> starringRoles = new ArrayList<>();
-					ArrayList<ExtraRole> extraRoles = new ArrayList<>();
-					int budget = 0;
-
-					if (roleChoice.equals("y")) {
-						for (BoardSection b : boardSections) {
-							for (Room r : b.getRoomObjects()) {
-								if ((r.getTitle()).equals(position)) {
-									SceneRoom sr = (SceneRoom) r;
-									for (ExtraRole e : sr.getExtraRoles()) {
-										if (e.getRank() <= curr.getRank()) {
-											extraRoles.add(e);
-										}
-									}
-									SceneCard sceneCard = sr.getSceneCard();
-									budget = sceneCard.getBudget();
-									for (StarringRole s : sceneCard.getStarringRoles()) {
-										if (s.getRank() <= curr.getRank()) {
-											starringRoles.add(s);
-										}
-									}
-									breakLoop = true;
-									break;
-								}
-							}
-							if (breakLoop = true) {
-								break;
-							}
-						}
-						breakLoop = false;
-					}
-					roleChoice = UI.roleChoose(extraRoles, starringRoles, budget);
+					ArrayList[] roleArrays = askRole(position, curr);
+					ArrayList extraRoles = roleArrays[0];
+					ArrayList starringRoles = roleArrays[1];
+					ArrayList budget = roleArrays[2];
+					int realBudget = (int) budget.get(0);
+					Role newRole = UI.roleChoose(extraRoles, starringRoles, realBudget);
+					curr.setRole(newRole);
 				}
 
-				//User has choosen to not take a role, or they are in a board position that doesn't have any roles.
-				//
-				//
-				//
-				String moveChoice = UI.moveCheck();
-				if (moveChoice.equals("a")) {
-					for (BoardSection b : boardSections) {
-						for (Room r : b.getRoomObjects()) {
-							if ((r.getTitle()).equals(position)) {
-								ArrayList<String> adjRooms = r.getAdjacentRooms();
-								String choice = UI.moveTo(adjRooms);
-								curr.setBoardPosition(choice);
-								breakLoop = true;
-								break;
-							}
-						}
-						if (breakLoop = true) {
-							break;
-						}
-					}
-					breakLoop = false;
-				} else if (moveChoice.equals("b")) {
-					UI.printPlayerStatus(curr);
-				} else {
+/*				User has chosen to not take a role, or they are in a board position that doesn't have any roles.*/
 
+				// Loop to allow player to check status as many times as they want.
+				while (!b) {
+					String moveChoice = UI.moveCheck();
+					if (moveChoice.equals("a")) {
+						ArrayList<String> adjRooms = getAdjRooms(position);
+						String choice = UI.moveTo(adjRooms);
+						curr.setBoardPosition(choice);
+//						/*for (BoardSection bs : boardSections) {
+//							for (Room r : bs.getRoomObjects()) {
+//								if ((r.getTitle()).equals(position)) {
+//									ArrayList<String> adjRooms = r.getAdjacentRooms();*/
+//									String choice = UI.moveTo(adjRooms);
+//									curr.setBoardPosition(choice);
+//									breakLoop = true;
+//									break;
+//								}
+//							}
+//							if (breakLoop = true) {
+//								break;
+//							}
+//						breakLoop = false;
+						currRoom = getCurrRoom(choice);
+						position = choice;
+						b = true;
+					} else if (moveChoice.equals("b")) {
+						UI.printPlayerStatus(curr);
+					} else {
+						b = true;
+						endPlayerTurn(curr);
+					}
+				}
+				/* Checks if player is in a scene room, and asks if they want to take a role. */
+				if ((currRoom instanceof SceneRoom) && (((SceneRoom) currRoom).getMovieStatus()) == true) {
+					// retrieving all the data from the askRole function call.
+					ArrayList[] roleArrays = askRole(position, curr);
+					ArrayList extraRoles = roleArrays[0];
+					ArrayList starringRoles = roleArrays[1];
+					ArrayList budget = roleArrays[2];
+					int realBudget = (int) budget.get(0);
+
+					// Ask user what role they would like.
+					Role newRole = UI.roleChoose(extraRoles, starringRoles, realBudget);
+					curr.setRole(newRole);
 				}
 				break;
 			case 2:
@@ -136,8 +129,49 @@ public class BoardController {
 				break;
 		}
 
-		}
+	}
 
+	public static Room getCurrRoom(String position) {
+		Room currRoom = null;
+		boolean breakLoop = false;
+		for (BoardSection b : boardSections) {
+			for (Room r : b.getRoomObjects()) {
+				if ((r.getTitle()).equals(position)) {
+					currRoom = r;
+					breakLoop = true;
+					break;
+				}
+			}
+			if (breakLoop == true) {
+				break;
+			}
+		}
+		breakLoop = false;
+		return currRoom;
+	}
+
+	public static ArrayList<String> getAdjRooms(String position) {
+		ArrayList<String> adjRooms = new ArrayList<>();
+		boolean breakLoop = false;
+		for (BoardSection bs : boardSections) {
+			for (Room r : bs.getRoomObjects()) {
+				if ((r.getTitle()).equals(position)) {
+					adjRooms = r.getAdjacentRooms();
+					breakLoop = true;
+					break;
+				}
+			}
+			if (breakLoop = true) {
+				break;
+			}
+		}
+		return adjRooms;
+	}
+
+	public static void endPlayerTurn(Actor curr) {
+		System.out.println("End of Player "+curr.getPlayerID()+"'s turn.\n\n");
+		playerQ.add(curr);
+	}
 
 	public static int getDays() {
 		return days;
@@ -169,6 +203,40 @@ public class BoardController {
 		BoardController.setMoviesLeft(10);
 
 	}
+
+	public static ArrayList[] askRole(String position, Actor curr) {
+		boolean breakLoop = false;
+		String roleChoice = UI.roleCheck();
+		ArrayList<Role> starringRoles = new ArrayList<>();
+		ArrayList<Role> extraRoles = new ArrayList<>();
+		int budget = 0;
+
+		if (roleChoice.equals("y")) {
+/*			for (BoardSection b : boardSections) {
+				for (Room r : b.getRoomObjects()) {
+					if ((r.getTitle()).equals(position)) {*/
+			Room r = getCurrRoom(position);
+			SceneRoom sr = (SceneRoom) r;
+			for (ExtraRole e : sr.getExtraRoles()) {
+				if (e.getRank() <= curr.getRank() && !e.isOccupied()) {
+					extraRoles.add(e);
+				}
+			}
+			SceneCard sceneCard = sr.getSceneCard();
+			budget = sceneCard.getBudget();
+			for (StarringRole s : sceneCard.getStarringRoles()) {
+				if (s.getRank() <= curr.getRank() && !s.isOccupied()) {
+					starringRoles.add(s);
+				}
+			}
+		}
+		// Work around for returning multiple different types (Java needs structs).
+		ArrayList<Integer> tempBudget = new ArrayList<>();
+		tempBudget.add(budget);
+		ArrayList[] roles = {extraRoles, starringRoles, tempBudget};
+		return roles;
+	}
+
 
 	public static int getMoviesLeft() {
 		return moviesLeft;

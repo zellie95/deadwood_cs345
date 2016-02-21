@@ -37,15 +37,23 @@ public class UI {
 
 	// Checks if a player wants to move.
 	public static String moveCheck() {
-		System.out.println("a) Move \n" +
-				"b) Check Status\n" +
-				"c) End turn\n");
-		console = new Scanner(System.in);
-		String choice = console.next();
-		choice.toLowerCase();
 		boolean b = false;
-		// Checks for valid input.
+		String choice = null;
 		while (!b) {
+			/*Pause for 1 second*/
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			System.out.println("\nWhat would you like to do?\n" +
+					"a) Move \n" +
+					"b) Check Status\n" +
+					"c) End turn\n");
+			console = new Scanner(System.in);
+			choice = console.next();
+			choice.toLowerCase();
+			// Checks for valid input.
 			if (!(choice.equals("a")) && (!(choice.equals("b"))) && (!(choice.equals("c")))) {
 				System.out.println("Please enter 'a' or 'b' or 'c'\n");
 				console = new Scanner(System.in);
@@ -57,20 +65,20 @@ public class UI {
 	}
 
 	public static String roleCheck() {
-		System.out.println("Would you like to take a role? Type y or n");
-		console = new Scanner(System.in);
-		String choice = console.next();
-		choice.toLowerCase();
+		String choice = null;
 		boolean b = false;
-
-		while (!b){
-			if(!choice.equals("y") && !choice.equals("n")){
-				System.out.println("Please enter 'y' or 'n'");
-				console = new Scanner(System.in);
-			}
-			else {
-				b = true;
-			}
+		while (!b) {
+			System.out.println("Would you like to take a role? Type y or n");
+			console = new Scanner(System.in);
+			choice = console.next();
+			choice.toLowerCase();
+				if(!choice.equals("y") && !choice.equals("n")){
+					System.out.println("Please enter 'y' or 'n'");
+					console = new Scanner(System.in);
+				}
+				else {
+					b = true;
+				}
 		}
 		return choice;
 	}
@@ -86,12 +94,12 @@ public class UI {
 			System.out.println("Budget of film = $"+budget+" million.");
 			System.out.println("Extra Roles: \n");
 			for (int i=0; i < extras.size(); i++) {
-				System.out.println((i+1)+") "+extras.get(i));
+				System.out.println((i+1)+") "+extras.get(i)+" - Rank = "+ extras.get(i).getRank());
 			}
 
 			System.out.println("Starring Roles: \n");
 			for (int j=0; j < stars.size(); j++) {
-				System.out.println((j+1)+") "+extras.get(j));
+				System.out.println((j+1)+") "+stars.get(j)+" - Rank = "+ stars.get(j).getRank());
 			}
 			console = new Scanner(System.in);
 			choice = console.next();
@@ -107,15 +115,18 @@ public class UI {
 				choice_split = choice.split(" ");
 				numChoice = Integer.parseInt(choice_split[1]);
 			}
-			/*
-			*
-			* TEST and add try-catch to check proper input bounds.
-			*
-			* */
 			if (choice_split[0].equals("extra")) {
-				 returnRole = extras.get(numChoice-1);
+				try {
+					returnRole = extras.get(numChoice-1);
+				} catch (NullPointerException e) {
+					System.out.println("Please enter a valid input.");
+				}
 			} else {
-				returnRole = stars.get(numChoice-1);
+				try {
+					returnRole = stars.get(numChoice-1);
+				} catch (NullPointerException e) {
+					System.out.println("Please enter a valid input.");
+				}
 			}
 		}
 		return returnRole;
@@ -174,7 +185,6 @@ public class UI {
 		System.out.println("Player " + playerID+":\n\n" +
 				"Player rank: " + rank+"\n"+
 				"Player position: "+ position+"\n"+
-				"Player role status: "+ roleStatus+ "\n"+
 				"Player total dollars: "+ dollars+"\n"+
 				"Player total credits: "+ credit+"\n"+
 				"Player shot bonus: " + shotbonus+ "\n"+
