@@ -10,40 +10,29 @@ public class Wallet {
         this.credits = credits;
     }
 
-
-    public void incDollars(int dollars) {
-        dollars += dollars;
-
-    }
-
     public int getDollars() {
         return dollars;
-    }
-
-    public void setDollars(int dollars) {
-        this.dollars = dollars;
     }
 
     public int getCredits() {
         return credits;
     }
 
-    public void setCredits(int credits) {
-        this.credits = credits;
+    public void incDollars(int dollars) {
+        this.dollars += dollars;
+
     }
 
     public void incCredits(int credit) {
-        credits += credit;
+        this.credits += credit;
 
     }
-
     public void decDollars(int dollars) {
-        dollars -= dollars;
+        this.dollars -= dollars;
 
     }
     public void decCredits(int credit) {
-        credits -= credit;
-
+        this.credits -= credit;
     }
 
 }

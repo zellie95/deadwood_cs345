@@ -30,8 +30,8 @@ public class SceneRoom extends Room {
 		return shotCounter;
 	}
 
-	public void setShotCounter(int shotCounter) {
-		this.shotCounter = shotCounter;
+	public void decShotCounter() {
+		this.shotCounter = shotCounter - 1;
 	}
 
 	public SceneCard getSceneCard() {
@@ -40,6 +40,42 @@ public class SceneRoom extends Room {
 
 	public void setSceneCard(SceneCard sceneCard) {
 		this.sceneCard = sceneCard;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		for (ExtraRole e : extraRoles) {
+			builder.append(e.getTitle());
+			builder.append(" - ");
+			if (e.getOccupant() == null) {
+				builder.append("Open Role! Must be rank: " +e.getRank());
+			} else {
+				builder.append(e.getOccupant());
+			}
+			builder.append(", ");
+		}
+		String extras = builder.toString();
+
+		builder = new StringBuilder();
+		for (StarringRole s : getSceneCard().getStarringRoles()) {
+			builder.append(s.getTitle());
+			builder.append(" - ");
+			if (s.getOccupant() == null) {
+				builder.append("Open Role! Must be rank: " + s.getRank());
+			} else {
+				builder.append(s.getOccupant());
+			}
+			builder.append(", ");
+		}
+		String stars = builder.toString();
+
+		return "\nMovie Status:\n" +
+				"\n   Budget: " + getSceneCard().getBudget() +
+				"\n   Shot Counters Remaining: " + shotCounter +
+				"\n   Extra Roles: " + extras +
+				"\n   Starring Roles: " + stars  +
+				'\n';
 	}
 
 	//	public int removeShotCounters(){

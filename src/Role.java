@@ -3,7 +3,7 @@ public abstract class Role {
 	private final int rank;
 	private final String title;
 	private final String catch_phrase;
-	private int rehearsal_tokens;
+	private int rehearsal_tokens; /*why rehersal tokens here? We have shot bonus in actor class? */ 
 	private boolean occupied;
 	private String occupant;
 
@@ -21,8 +21,22 @@ public abstract class Role {
 		return roleString;
 	}
 
+	/*
+	*
+	* Abstract methods.
+	*
+	* */
+
+	public abstract int[] payout();
+
+	public abstract int bonusPayOut();
+
 	public int getRank() {
 		return rank;
+	}
+
+	public String getTitle() {
+		return title;
 	}
 
 	public boolean isOccupied() {

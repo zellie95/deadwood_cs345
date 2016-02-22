@@ -1,7 +1,7 @@
 /*
  * Created by zazulam on 2/13/16.
  */
-public class Actor {
+public class Actor implements Comparable<Actor>{
 
 
     private Wallet wallet;
@@ -23,13 +23,10 @@ public class Actor {
 
     }
 
-
-//    public int act(){
-//        int rolledDie = Dice.rollDice(shotBonus);
-//        return rolledDie;
-//    }
-
-
+    @Override
+    public int compareTo(Actor other) {
+        return Integer.compare(this.getRole().getRank(), other.getRole().getRank());
+    }
 
     public Role getRole() {
         return role;
@@ -81,8 +78,8 @@ public class Actor {
         return rank;
     }
 
-    public void setRoleStatus(boolean roleStatus) {
-        this.roleStatus = roleStatus;
+    public void setRoleStatus(boolean status) {
+        this.roleStatus = status;
     }
     public boolean getRoleStatus(){
         return roleStatus;
