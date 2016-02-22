@@ -5,21 +5,32 @@ public class SceneRoom extends Room {
 	private ArrayList<ExtraRole> extraRoles;
 	private boolean movieStatus;
 	private SceneCard sceneCard;
+	private int savedShotCounters;
 
-	public SceneRoom(String title, int shotCounters, ArrayList<ExtraRole> roles, SceneCard card, ArrayList<String> adjRooms) {
+	public SceneRoom(String title, int shotCounters,  ArrayList<ExtraRole> roles, SceneCard card, ArrayList<String> adjRooms) {
 		super(title, adjRooms);
 		this.shotCounter = shotCounters;
 		this.sceneCard = card;
 		this.extraRoles = roles;
 		this.movieStatus = true;
+		this.savedShotCounters = shotCounters;
 	}
 
 	public ArrayList<ExtraRole> getExtraRoles() {
 		return extraRoles;
 	}
 
+	public void setShotCounter(int shotCounter) {
+		this.shotCounter = shotCounter;
+	}
+
+	public int getSavedShotCounters() {
+		return savedShotCounters;
+	}
+
 	public boolean getMovieStatus() {
 		return movieStatus;
+
 	}
 
 	public void setMovieStatus(boolean movieStatus) {
@@ -69,8 +80,14 @@ public class SceneRoom extends Room {
 			builder.append(", ");
 		}
 		String stars = builder.toString();
-
+		String productionStatus = null;
+		if (this.movieStatus == true) {
+			productionStatus = "Movie is still in production!";
+		} else {
+			productionStatus = "Movie in no longer in production...";
+		}
 		return "\nMovie Status:\n" +
+				"\n   Production Status: "+productionStatus+
 				"\n   Budget: " + getSceneCard().getBudget() +
 				"\n   Shot Counters Remaining: " + shotCounter +
 				"\n   Extra Roles: " + extras +

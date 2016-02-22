@@ -22,9 +22,7 @@ public abstract class Role {
 	}
 
 	/*
-	*
 	* Abstract methods.
-	*
 	* */
 
 	public abstract int[] payout();

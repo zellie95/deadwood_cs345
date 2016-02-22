@@ -11,6 +11,10 @@ public class CastingOffice extends Room {
         super(title, adjRooms);
     }
 
+    public HashMap<Integer, Integer[]> getUpgradeHash() {
+        return upgradeHash;
+    }
+
     public HashMap<Integer, Integer[]> upgradeHash = new HashMap<Integer, Integer[]>();
 
     {

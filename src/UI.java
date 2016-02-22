@@ -90,18 +90,19 @@ public class UI {
 		String choice = null;
 		String[] choice_split = null;
 		while (!b) {
-			System.out.println("What role would you like to take? (Enter starring <number> or extra <number>): \n");
+			System.out.println("What role would you like to take?\n"+
+								"(Enter <starring OR extra> <number>: 'starring 1') \n");
 			System.out.println("Budget of film = $"+budget+" million.\n");
 
 			/* Traverses extras and starring roles array lists to retrieve possible role options */
          if(!extras.isEmpty()){
-            System.out.println("\nExtra Roles: \n");
+            System.out.println("Extra Roles: \n");
    			for (int i=0; i < extras.size(); i++) {
    				System.out.println((i+1)+") "+extras.get(i)+" - Rank = "+ extras.get(i).getRank());
    			}
           }
          else{
-	         System.out.println("\n No extra roles!\n");
+	         System.out.println("\nNo extra roles!\n");
          }
          if(!stars.isEmpty()){
    			System.out.println("\nStarring Roles: \n");
@@ -110,7 +111,7 @@ public class UI {
    			}
          }
          else{
-         	System.out.println("\n No starring roles!\n");
+         	System.out.println("\nNo starring roles!\n");
          }
 
 		if (stars.isEmpty() && extras.isEmpty()) {
@@ -156,7 +157,7 @@ public class UI {
 
 	public static String moveTo(ArrayList<String> adjRooms) {
 		int numChoice = 0;
-		System.out.println("Where would you like to move?: \n");
+		System.out.println("Where would you like to move?\n");
 		for (int i=0; i < adjRooms.size(); i++) {
 			System.out.println((i+1)+") "+adjRooms.get(i));
 		}
@@ -189,8 +190,8 @@ public class UI {
 			console = new Scanner(System.in);
 			choice = console.next();
 			choice.toLowerCase();
-			if(!choice.equals("a") && !choice.equals("b") && !choice.equals("c") && !choice.equals("d")){
-				System.out.println("Please enter 'a' or 'b' or 'c' or 'd'");
+			if(!choice.equals("a") && !choice.equals("b") && !choice.equals("c") && !choice.equals("d")) {
+				System.out.println("Please enter 'a', 'b', 'c', or 'd'");
 				console = new Scanner(System.in);
 			}
 			else {
@@ -222,6 +223,60 @@ public class UI {
 		return choice;
 	}
 
+	public static String upgradeCheck(){
+		String choice = null;
+		boolean b = false;
+		while(!b){
+			System.out.println("What would you like to do?\n" +
+								"a) Move\n"+
+								"b) Upgrade Actor Rank\n"+
+								"c) Check Actor Status\n");
+			console = new Scanner(System.in);
+			choice = console.next();
+			choice.toLowerCase();
+			if(!choice.equals("a") && !choice.equals("b") && !choice.equals("c")){
+				System.out.println("Please enter 'a' or 'b' or 'c'");
+				console = new Scanner(System.in);
+			}
+			else {
+				b = true;
+			}
+		}
+		return choice;
+	}
+
+	public static String upgradeWithDollarsOrCredits() {
+		String choice = null;
+		boolean b = false;
+
+		while (!b) {
+			System.out.println("Welcome to the Casting Office!\n" +
+					"Rank 2: 4 Dollars OR 5 Credits\n" +
+					"Rank 3: 10 Dollars OR 10 Credits\n" +
+					"Rank 4: 18 Dollars OR 15 Credits\n" +
+					"Rank 5: 28 Dollars OR 20 Credits\n" +
+					"Rank 6: 40 Dollars OR 25 Credits\n");
+			System.out.println("\nEnter which rank you want to upgrade to and how you will pay: \n" +
+					"(Enter <desired rank number> <dollars OR credits>: '2 dollars')");
+
+			System.out.println("\nType 'exit' to return to menu.\n");
+
+			console = new Scanner(System.in);
+			choice = console.nextLine();
+			choice.toLowerCase();
+			if (!choice.equals("2 dollars") && !choice.equals("3 dollars") && !choice.equals("4 dollars") && !choice.equals("5 dollars")
+					&& !choice.equals("6 dollars") && !choice.equals("2 credits") && !choice.equals("3 credits") && !choice.equals("4 credits")
+					&& !choice.equals("5 credits") && !choice.equals("6 credits") && !choice.equals("exit")) {
+				System.out.println("Please enter 'dollars' or 'credits' or 'exit'");
+				console = new Scanner(System.in);
+			} else {
+				b = true;
+			}
+		}
+		return choice;
+	}
+
+
 	/*
 	* All print status methods
 	*
@@ -251,6 +306,8 @@ public class UI {
 				"Player shot bonus: " + shotbonus+ "\n"+
 				"Player role status: "+currRole+"\n");
 	}
+
+
 
 	public static void printMovieStatus(SceneRoom sr){
 		System.out.println(sr.toString());
