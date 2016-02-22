@@ -17,7 +17,7 @@ public class Dice implements Comparable<Dice> {
 
 
     public int compareTo(Dice other) {
-        return Integer.compare(this.value, other.value);
+        return Integer.compare(other.value, this.value);
     }
 
     public int getValue() {

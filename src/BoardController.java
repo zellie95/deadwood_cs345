@@ -74,6 +74,12 @@ public class BoardController {
 
    public static void playerTurn() {
       Actor curr = playerQ.remove();
+       /*
+      *
+      * FOR TESTING ONLY! DELETE ME.
+      *
+      * */
+      curr.setRank(6);
       String position = curr.getBoardPosition();
       Boolean roleStatus = curr.getRoleStatus();
       int caseArg;
@@ -412,7 +418,7 @@ public class BoardController {
       SceneCard card = currRoom.getSceneCard();
       int budget = card.getBudget();
 
-      // set all actor in roles in this scene room to statuis to false.
+      // set all actor in roles in this scene room to status to false.
       insideActors.add(curr);
       curr.setRoleStatus(false);
       for (Actor a : playerQ) {
@@ -425,24 +431,35 @@ public class BoardController {
       // Check if any players are on the scene card, ensuring that a bonus is necessary.
       boolean bonusValidation = validBonus(card);
       if (bonusValidation) {
-//         for (Actor a : playerQ) {
-//            if (a.getBoardPosition().equals(roomTitle) && a.getRoleStatus()) {
-//               insideActors.add(a);
-//               a.setRoleStatus(false);                      //// TEST CHECK
-//            }
-//         }
          for (Actor act : insideActors) {
             act.setShotBonus(0);
             if (act.getRole() instanceof ExtraRole) {
                int payment = act.getRole().bonusPayOut();
                act.getWallet().incDollars(payment);
-               act.setRole(null);                          //// Test check
+               act.setRole(null);
             } else {
                stars.add(act);
-               act.setRole(null);                        //// Test check
+
+               /* This check has been created to make sure that bonus payout is distributed to other roles on the scene
+                * card even when no one is occupying them. Otherwise this will allow the only player on the scene card
+                * to take all of the bonus earnings, contrary to the rules of the game.*/
+               for (StarringRole starRole : card.getStarringRoles()) {
+                  if (starRole.getOccupant() == null) {
+                     Actor dummyStar = new Actor(0);
+                     dummyStar.setRole(starRole);
+                     int rank = starRole.getRank();
+                     dummyStar.setRank(rank);
+                     stars.add(dummyStar);
+                  }
+               }
+//               act.setRole(null);
             }
          }
-         starBonus(stars, budget);
+         int currEarnings = starBonus(stars, budget, curr);
+         curr.getWallet().incDollars(currEarnings);
+         for (Actor star: stars) {
+            star.setRole(null);
+         }
       } else {
          System.out.println("\nFilm is complete. If there were no starring actors, there will be no bonus payments.");
          // resets all actors in roles in the scene room to null.
@@ -457,33 +474,55 @@ public class BoardController {
       return curr;
    }
 
-   public static void starBonus(ArrayList<Actor> stars, int budget) {
-      Queue<Integer> diceValues = new PriorityQueue<Integer>();
-      Queue<Actor> starQ;
-      Actor a;
-      /* Sort the stars ArrayList and then cast it to a Queue, b/c we want the functionality of a queue when
-       * |diceValues| > |stars|
-      */
-      Collections.sort(stars);
-      starQ = (Queue<Actor>) stars;
+   public static int starBonus(ArrayList<Actor> stars, int budget, Actor curr) {
+      PriorityQueue<Dice> diceValues = new PriorityQueue<Dice>();
+      PriorityQueue<Actor> starQ = new PriorityQueue<>();
+      Actor a = null;
+      int currEarnings = 0;
+//      Collections.sort(stars);
+//      starQ = (Queue<Actor>) stars;
 
+      //Throw all stars into a priority queue, sorts based on role rank.
+      starQ.addAll(stars);
       for (int i = 0; i < budget; i++) {
          Dice die = new Dice();
-         int value = die.getValue();
-         diceValues.add(value);
+//         int value = die.getValue();
+         diceValues.add(die);
       }
 
       while (!diceValues.isEmpty()) {
-         int dollars = diceValues.remove();
-         a = starQ.remove();
-         for (Actor actor : playerQ) {
-            if (a.getPlayerID() == actor.getPlayerID()) {
-               System.out.println("Player "+actor.getPlayerID()+" receives $"+dollars);
-               actor.getWallet().incDollars(dollars);
+         // to ensure max value is on top, we have to call add and remove once to re-max-heapify the priority queue.
+         Dice d = diceValues.remove();
+         diceValues.add(d);
+         d = diceValues.remove();
+         // Get the int dollar value.
+         int dollars = d.getValue();
+         if (starQ.isEmpty()) {
+            starQ.addAll(stars);
+         } else {
+            a = starQ.remove();
+         }
+
+          /*Checking if the star is the current player, because we dequeued them at the start of the turn, and want to
+          manipulate the data. Due to the pass by value restriction in Java, we won't be manipulating the actor objects
+          in our playerQ unless we call the global playerQ (we'll only be manipulating a copy, then throwing that away.
+          Thus, manipulating the current player data become a huge issue in our program.
+
+          We should have made out current player object a global variable, and reinstantiated it with the new player that
+          we dequeue at the beginning of the turn, but it's too late, and the project is due tonight.
+           */
+         if (a.getPlayerID() == curr.getPlayerID()) {
+            currEarnings += dollars;
+         } else {
+            for (Actor actor : playerQ) {
+               if (a.getPlayerID() == actor.getPlayerID()) {
+                  System.out.println("Player " + actor.getPlayerID() + " receives $" + dollars);
+                  actor.getWallet().incDollars(dollars);
+               }
             }
          }
-         starQ.add(a);
       }
+      return currEarnings;
    }
 
    public static void resetRoles(SceneRoom currRoom) {
@@ -515,7 +554,6 @@ public class BoardController {
 
    public static boolean validBonus(SceneCard card) {
       boolean b = false;
-
       for (StarringRole s : card.getStarringRoles()) {
          if (s.isOccupied() == true) {
             b = true;
