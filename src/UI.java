@@ -157,23 +157,24 @@ public class UI {
 
 	public static String moveTo(ArrayList<String> adjRooms) {
 		int numChoice = 0;
-		System.out.println("Where would you like to move?\n");
-		for (int i=0; i < adjRooms.size(); i++) {
-			System.out.println((i+1)+") "+adjRooms.get(i));
-		}
-		console = new Scanner(System.in);
-		String choice = console.next();
-		choice.toLowerCase();
 		boolean b = false;
 		// Checks for valid input.
 		while (!b) {
-			if (!choice.equals("1") && (!choice.equals("2") && (!choice.equals("3") && (!choice.equals("4"))))) {
-				System.out.println("Please enter a valid input.\n");
-				console = new Scanner(System.in);
-			} else {
-				b = true;
-				numChoice = Integer.parseInt(choice);
+			System.out.println("Where would you like to move?\n");
+			for (int i=0; i < adjRooms.size(); i++) {
+				System.out.println((i+1)+") "+adjRooms.get(i));
 			}
+			console = new Scanner(System.in);
+			String choice = console.next();
+			choice.toLowerCase();
+	//		while (!b) {
+				if (!choice.equals("1") && (!choice.equals("2") && (!choice.equals("3") && (!choice.equals("4"))))) {
+					System.out.println("Please enter a valid input.\n");
+					console = new Scanner(System.in);
+				} else {
+					b = true;
+					numChoice = Integer.parseInt(choice);
+				}
 		}
 		return adjRooms.get(numChoice-1);
 	}
@@ -205,7 +206,7 @@ public class UI {
 		String choice = null;
 		boolean b = false;
 		while (!b) {
-			System.out.println("What would you like to do?\n" +
+			System.out.println("\nWhat would you like to do?\n" +
 					"a) Check Actor Status \n"+
 					"b) Check Movie Status \n"+
 					"c) End Turn \n");
@@ -226,16 +227,13 @@ public class UI {
 	public static String upgradeCheck(){
 		String choice = null;
 		boolean b = false;
-		while(!b){
-			System.out.println("What would you like to do?\n" +
-								"a) Move\n"+
-								"b) Upgrade Actor Rank\n"+
-								"c) Check Actor Status\n");
+		while (!b) {
+			System.out.println("Would you like to upgrade? Type y or n");
 			console = new Scanner(System.in);
 			choice = console.next();
 			choice.toLowerCase();
-			if(!choice.equals("a") && !choice.equals("b") && !choice.equals("c")){
-				System.out.println("Please enter 'a' or 'b' or 'c'");
+			if(!choice.equals("y") && !choice.equals("n")){
+				System.out.println("Please enter 'y' or 'n'");
 				console = new Scanner(System.in);
 			}
 			else {
@@ -267,7 +265,7 @@ public class UI {
 			if (!choice.equals("2 dollars") && !choice.equals("3 dollars") && !choice.equals("4 dollars") && !choice.equals("5 dollars")
 					&& !choice.equals("6 dollars") && !choice.equals("2 credits") && !choice.equals("3 credits") && !choice.equals("4 credits")
 					&& !choice.equals("5 credits") && !choice.equals("6 credits") && !choice.equals("exit")) {
-				System.out.println("Please enter 'dollars' or 'credits' or 'exit'");
+				System.out.println("\nPlease enter 'dollars' or 'credits' or 'exit'");
 				console = new Scanner(System.in);
 			} else {
 				b = true;

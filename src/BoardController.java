@@ -7,6 +7,7 @@ public class BoardController {
    private static List<BoardSection> boardSections;
    private static Queue<Actor> playerQ;
    private static Random randomGenerator;
+   // FOR TESTING
    private static int days = 0;
    private static int moviesLeft = 0;
 
@@ -22,6 +23,7 @@ public class BoardController {
    * SceneRoom, and then starts the game.
    *
    */
+
    public static void main(String[] args) {
    	/* Bad idea, but leave for now. */
       if (args.length != 3) {
@@ -73,13 +75,22 @@ public class BoardController {
 
 
    public static void playerTurn() {
+
       Actor curr = playerQ.remove();
-       /*
-      *
-      * FOR TESTING ONLY! DELETE ME.
-      *
-      * */
-      curr.setRank(6);
+//      /*
+//      *
+//      * TESTING ONLY
+//      *
+//      * */
+//      setMoviesLeft(1);
+//      curr.getWallet().incCredits(100);
+//      curr.getWallet().incDollars(0);
+//      curr.setRank(3);
+//      curr.setBoardPosition("Jail");
+//      curr.setShotBonus(100);
+//
+//      ////////////////////////////////////////////////
+
       String position = curr.getBoardPosition();
       Boolean roleStatus = curr.getRoleStatus();
       int caseArg;
@@ -109,8 +120,8 @@ public class BoardController {
 
       switch (caseArg) {
          case 1:
-
             // If already in a Scene Room, ask if they want to take a role.
+            boolean turnOver = false;
             boolean b = false;
             if ((currRoom instanceof SceneRoom) && (((SceneRoom) currRoom).getMovieStatus()) == true) {
                ArrayList[] roleArrays = askRole(position, curr);
@@ -145,89 +156,91 @@ public class BoardController {
                   } else if (moveChoice.equals("b")) {
                      UI.printPlayerStatus(curr);
                   } else {
+                     endPlayerTurn(curr);
+                     turnOver = true;
                      b = true;
-                     //endPlayerTurn(curr);
                   }
                }
             }
 
+            if (!turnOver) {
+               // Probably unnecessary
+               if ((currRoom instanceof SceneRoom) && (((SceneRoom) currRoom).getMovieStatus()) == true && curr.getRoleStatus() == false) {
+                  // retrieving all the data from the askRole function call.
+                  ArrayList[] roleArrays = askRole(position, curr);
+                  if (roleArrays != null) {
+                     ArrayList extraRoles = roleArrays[0];
+                     ArrayList starringRoles = roleArrays[1];
+                     ArrayList budgetArrayList = roleArrays[2];
+                     int realBudget = (int) budgetArrayList.get(0);
 
-            // Probably unnecessary
-            if ((currRoom instanceof SceneRoom) && (((SceneRoom) currRoom).getMovieStatus()) == true && curr.getRoleStatus() == false) {
-               // retrieving all the data from the askRole function call.
-               ArrayList[] roleArrays = askRole(position, curr);
-               if (roleArrays != null) {
-                  ArrayList extraRoles = roleArrays[0];
-                  ArrayList starringRoles = roleArrays[1];
-                  ArrayList budgetArrayList = roleArrays[2];
-                  int realBudget = (int) budgetArrayList.get(0);
-
-                  // Ask user what role they would like.
-                  Role newRole = UI.roleChoose(extraRoles, starringRoles, realBudget);
-                  if (newRole != null) {
-                     curr.setRole(newRole);
-                     newRole.setOccupied(true);
-                     newRole.setOccupant("Player " + curr.getPlayerID());
-                     curr.setRoleStatus(true);
+                     // Ask user what role they would like.
+                     Role newRole = UI.roleChoose(extraRoles, starringRoles, realBudget);
+                     if (newRole != null) {
+                        curr.setRole(newRole);
+                        newRole.setOccupied(true);
+                        newRole.setOccupant("Player " + curr.getPlayerID());
+                        curr.setRoleStatus(true);
+                     }
                   }
                }
-            }
 
-            if ((currRoom instanceof CastingOffice)) {
-               String upgradeChoice = UI.upgradeWithDollarsOrCredits();
-               int getMoney = curr.getWallet().getDollars();
-               int getCredits = curr.getWallet().getCredits();
-               int setNewRank = 0;
+               if ((currRoom instanceof CastingOffice)) {
+                  String upgradeChoice = UI.upgradeWithDollarsOrCredits();
+                  int getMoney = curr.getWallet().getDollars();
+                  int getCredits = curr.getWallet().getCredits();
+                  int setNewRank = 0;
 
-               boolean validUpgrade = false;
-               while (!validUpgrade) {
-                  Room castingOffice = getCurrRoom("CastingOffice");
-                  String upgradeRank = UI.upgradeWithDollarsOrCredits();
-                  String[] choice_split = null;
+                  boolean validUpgrade = false;
+                  while (!validUpgrade) {
+                     Room castingOffice = getCurrRoom("CastingOffice");
+                     String upgradeRank = UI.upgradeWithDollarsOrCredits();
+                     String[] choice_split = null;
 
-                  String payment = null;
-                  HashMap<Integer, Integer[]> hash = ((CastingOffice) castingOffice).getUpgradeHash();
-                  int d = hash.get(setNewRank)[0];
-                  int cr = hash.get(setNewRank)[1];
-                  choice_split = upgradeRank.split(" ");
-                  setNewRank = Integer.parseInt(choice_split[0]);
-                  payment = choice_split[1];
+                     String payment = null;
+                     HashMap<Integer, Integer[]> hash = ((CastingOffice) castingOffice).getUpgradeHash();
+                     int d = hash.get(setNewRank)[0];
+                     int cr = hash.get(setNewRank)[1];
+                     choice_split = upgradeRank.split(" ");
+                     setNewRank = Integer.parseInt(choice_split[0]);
+                     payment = choice_split[1];
 
-                  if (!(curr.getRank() >= setNewRank)) {
-                     if (payment.equals("dollars") && getMoney >= d) {
-                        curr.getWallet().decDollars(d);
-                        curr.setRank(setNewRank);
+                     if (!(curr.getRank() >= setNewRank)) {
+                        if (payment.equals("dollars") && getMoney >= d) {
+                           curr.getWallet().decDollars(d);
+                           curr.setRank(setNewRank);
+                        }
+                        if (payment.equals("credits") && getCredits >= cr) {
+                           curr.getWallet().decCredits(cr);
+                           curr.setRank(setNewRank);
+                        }
+                        validUpgrade = true;
+                     } else {
+                        System.out.println("You have insufficient funds to upgrade.");
+                        UI.printPlayerStatus(curr);
                      }
-                     if (payment.equals("credits") && getCredits >= cr) {
-                        curr.getWallet().decCredits(cr);
-                        curr.setRank(setNewRank);
-                     }
-                     validUpgrade = true;
-                  } else {
-                     System.out.println("You have insufficient funds to upgrade.");
+                  }
+
+
+               }
+
+
+               b = false;
+               while (!b) {
+                  String choice = UI.finalCheck();
+                  if (choice.equals("a")) {
                      UI.printPlayerStatus(curr);
+                  } else if (choice.equals("b")) {
+                     try {
+                        SceneRoom sceneRoom = (SceneRoom) currRoom;
+                        UI.printMovieStatus(sceneRoom);
+                     } catch (Exception e) {
+                        System.out.println("You are not currently in a Scene Room!");
+                     }
+                  } else {
+                     endPlayerTurn(curr);
+                     b = true;
                   }
-               }
-
-
-            }
-
-
-            b = false;
-            while (!b) {
-               String choice = UI.finalCheck();
-               if (choice.equals("a")) {
-                  UI.printPlayerStatus(curr);
-               } else if (choice.equals("b")) {
-                  try {
-                     SceneRoom sceneRoom = (SceneRoom) currRoom;
-                     UI.printMovieStatus(sceneRoom);
-                  } catch (Exception e) {
-                     System.out.println("You are not currently in a Scene Room!");
-                  }
-               } else {
-                  endPlayerTurn(curr);
-                  b = true;
                }
             }
             break;
@@ -302,25 +315,16 @@ public class BoardController {
             int getMoney = curr.getWallet().getDollars();
             int getCredits = curr.getWallet().getCredits();
 
-            while (!upgradeChoice.equals("a") && !upgradeChoice.equals("b")) {
-               UI.printPlayerStatus(curr);
-               upgradeChoice = UI.upgradeCheck();
-            }
-
-            if (upgradeChoice.equals("a")) {
-               ArrayList<String> adjRooms = getAdjRooms(position);
-               String choice = UI.moveTo(adjRooms);
-               curr.setBoardPosition(choice);
-               currRoom = getCurrRoom(choice);
-               position = choice;
-            }
-
             // Check upgrade validity, then upgrade.
             boolean validUpgrade = false;
-            if (upgradeChoice.equals("b")) {
+            if (upgradeChoice.equals("y")) {
+               UI.printPlayerStatus(curr);
                while (!validUpgrade) {
                   Room castingOffice = getCurrRoom("CastingOffice");
                   String upgradeRank = UI.upgradeWithDollarsOrCredits();
+                  if (upgradeRank.equals("exit")) {
+                     break;
+                  }
                   String[] choice_split = null;
                   int setNewRank = 0;
                   String payment = null;
@@ -340,42 +344,44 @@ public class BoardController {
                      if (payment.equals("dollars") && getMoney >= d) {
                         curr.getWallet().decDollars(d);
                         curr.setRank(setNewRank);
-                     }
-                     if (payment.equals("credits") && getCredits >= cr) {
+                        System.out.println("Player " + curr.getPlayerID() + " spent $" + d + " and upgraded to " + curr.getRank() + "\n");
+                        validUpgrade = true;
+                     } else if (payment.equals("credits") && getCredits >= cr) {
                         curr.getWallet().decCredits(cr);
                         curr.setRank(setNewRank);
+                        System.out.println("Player "+curr.getPlayerID()+" spent "+cr+" credits and upgraded to "+curr.getRank()+"\n");
+                        validUpgrade = true;
+                     } else {
+                        System.out.println("You have insufficient funds for this upgrade.\n");
+                        UI.printPlayerStatus(curr);
                      }
-
-                     validUpgrade = true;
+//                     validUpgrade = true;
                   } else {
-                     System.out.println("You have insufficient funds to upgrade.");
+                     System.out.println("You can't downgrade your rank");
                      UI.printPlayerStatus(curr);
                   }
                }
-
-
             }
+
             // Prompt move if they choose to not upgrade.
             boolean exitBreakLoop = false;
-            if (upgradeChoice.equals("exit")) {
-               while (!exitBreakLoop) {
-                  String moveChoice = UI.moveCheck();
-                  if (moveChoice.equals("a")) {
-                     ArrayList<String> adjRooms = getAdjRooms(position);
-                     String choice = UI.moveTo(adjRooms);
-                     curr.setBoardPosition(choice);
-                     currRoom = getCurrRoom(choice);
-                     position = choice;
-
-                     exitBreakLoop = true;
-                  } else if (moveChoice.equals("b")) {
-                     UI.printPlayerStatus(curr);
-                  } else {
-                     exitBreakLoop = true;
-                     endPlayerTurn(curr);
-                  }
+            while (!exitBreakLoop) {
+               String moveChoice = UI.moveCheck();
+               if (moveChoice.equals("a")) {
+                  ArrayList<String> adjRooms = getAdjRooms(position);
+                  String choice = UI.moveTo(adjRooms);
+                  curr.setBoardPosition(choice);
+                  currRoom = getCurrRoom(choice);
+                  position = choice;
+                  exitBreakLoop = true;
+               } else if (moveChoice.equals("b")) {
+                  UI.printPlayerStatus(curr);
+               } else {
+                  exitBreakLoop = true;
+                  endPlayerTurn(curr);
                }
             }
+
 
             // Checking if they want to take a role in scene room after moving.
             if ((currRoom instanceof SceneRoom) && (((SceneRoom) currRoom).getMovieStatus()) == true) {
@@ -407,6 +413,10 @@ public class BoardController {
             }
 
             break;
+
+          //Troubleshooting case
+         case 4:
+            endPlayerTurn(curr);
       }
 
    }
@@ -431,6 +441,8 @@ public class BoardController {
       // Check if any players are on the scene card, ensuring that a bonus is necessary.
       boolean bonusValidation = validBonus(card);
       if (bonusValidation) {
+         System.out.println("Film is complete. Here are the results for the bonus payments! Bonuses are\n" +
+                              " only awarded to the starring actors.");
          for (Actor act : insideActors) {
             act.setShotBonus(0);
             if (act.getRole() instanceof ExtraRole) {
@@ -452,7 +464,6 @@ public class BoardController {
                      stars.add(dummyStar);
                   }
                }
-//               act.setRole(null);
             }
          }
          int currEarnings = starBonus(stars, budget, curr);
@@ -469,24 +480,21 @@ public class BoardController {
          }
       }
       resetRoles(currRoom);
-      currRoom.setMovieStatus(false);
+//      currRoom.setMovieStatus(false);
       moviesLeft--;
       return curr;
    }
 
    public static int starBonus(ArrayList<Actor> stars, int budget, Actor curr) {
-      PriorityQueue<Dice> diceValues = new PriorityQueue<Dice>();
+      PriorityQueue<Dice> diceValues = new PriorityQueue<>();
       PriorityQueue<Actor> starQ = new PriorityQueue<>();
       Actor a = null;
       int currEarnings = 0;
-//      Collections.sort(stars);
-//      starQ = (Queue<Actor>) stars;
 
       //Throw all stars into a priority queue, sorts based on role rank.
       starQ.addAll(stars);
       for (int i = 0; i < budget; i++) {
          Dice die = new Dice();
-//         int value = die.getValue();
          diceValues.add(die);
       }
 
@@ -500,6 +508,9 @@ public class BoardController {
          if (starQ.isEmpty()) {
             starQ.addAll(stars);
          } else {
+            // Force max-heapify.
+            a = starQ.remove();
+            starQ.add(a);
             a = starQ.remove();
          }
 
@@ -512,6 +523,7 @@ public class BoardController {
           we dequeue at the beginning of the turn, but it's too late, and the project is due tonight.
            */
          if (a.getPlayerID() == curr.getPlayerID()) {
+            System.out.println("Player " + curr.getPlayerID() + " receives $" +dollars);
             currEarnings += dollars;
          } else {
             for (Actor actor : playerQ) {
@@ -609,19 +621,19 @@ public class BoardController {
       return days;
    }
 
-   public static void setDays(int days) {
+   public static void setDays(int players) {
 
-      if ((days == 2) || (days == 3)) {
+      if ((players == 2) || (players == 3)) {
          BoardController.days = 3;
-      } else if (days == 4) {
+      } else if (players == 4) {
          BoardController.days = 4;
 
-      } else if (days == 5) {
+      } else if (players == 5) {
          BoardController.days = 4;
          for (Actor a : playerQ) {
             setActorCredits(a, 2);
          }
-      } else if (days == 6) {
+      } else if (players == 6) {
          BoardController.days = 4;
          for (Actor a : playerQ) {
             setActorCredits(a, 4);
@@ -836,7 +848,7 @@ public class BoardController {
             }
          }
       }
-
+      setMoviesLeft(10);
       for (Actor p : playerQ) {
          p.setBoardPosition("Trailers");
          p.setRole(null);
