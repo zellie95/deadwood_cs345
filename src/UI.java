@@ -30,8 +30,8 @@ public class UI {
 		 }
 		 System.out.println("Randomizing player order...\n");
 		 Collections.shuffle(playerQ);
-		 BoardController.setPlayerQ(playerQ);
-		 BoardController.setDays(input);
+		 Deadwood.setPlayerQ(playerQ);
+		 Deadwood.setDays(input);
 
 	 }
 
@@ -83,7 +83,7 @@ public class UI {
 		return choice;
 	}
 
-	public static Role roleChoose(ArrayList<ExtraRole> extras, ArrayList<StarringRole> stars, int budget) {
+	public static Role roleChoose(ArrayList<Role> extras, ArrayList<Role> stars, int budget) {
 		int numChoice = 0;
 		Role returnRole = null;
 		boolean b = false;
@@ -157,6 +157,7 @@ public class UI {
 
 	public static String moveTo(ArrayList<String> adjRooms) {
 		int numChoice = 0;
+		String roomChoice = null;
 		boolean b = false;
 		// Checks for valid input.
 		while (!b) {
@@ -167,16 +168,21 @@ public class UI {
 			console = new Scanner(System.in);
 			String choice = console.next();
 			choice.toLowerCase();
-	//		while (!b) {
 				if (!choice.equals("1") && (!choice.equals("2") && (!choice.equals("3") && (!choice.equals("4"))))) {
 					System.out.println("Please enter a valid input.\n");
 					console = new Scanner(System.in);
 				} else {
-					b = true;
 					numChoice = Integer.parseInt(choice);
 				}
+			try {
+				roomChoice = adjRooms.get(numChoice-1);
+				b = true;
+			} catch (IndexOutOfBoundsException e) {
+				System.out.println("Please enter a valid input.");
+			}
 		}
-		return adjRooms.get(numChoice-1);
+
+		return roomChoice;
 	}
 
 	public static String workCheck() {
@@ -277,10 +283,7 @@ public class UI {
 
 	/*
 	* All print status methods
-	*
-	*
-	*
-	* */
+	*/
 
 	public static void printPlayerStatus(Actor a) {
 		int playerID = a.getPlayerID();
@@ -315,23 +318,4 @@ public class UI {
 		System.out.println("You rolled a "+ diceRoll);
 
 	}
-
-
-//
-//	public static void chooseAMoveInCastingOffice(){
-//		System.out.println("Choose a move: \n
-//							1) Move to a different room \n
-//							2) Upgrade rank");
-//		Scanner inputInCastingOffice = new Scanner(System.in);
-//		int choice = inputInCastingOffice.nextInt();
-//		BoardController.playerChoice(choice);
-//	}
-
-//	private void welcomeToDeadwood(){
-//		message("Welcome tp Deadwood, Bitches");
-//	}
-
-//	private void message(String format, Object... args){
-//		output.println(String.format(format, args));
-//	}
 }

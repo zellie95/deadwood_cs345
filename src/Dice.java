@@ -7,7 +7,6 @@ import java.lang.*;
 public class Dice implements Comparable<Dice> {
     private static Random rand;
     private int value;
-    //0private int random;
 
     public Dice(){
       this.rand = new Random();  

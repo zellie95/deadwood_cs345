@@ -21,10 +21,6 @@ public abstract class Role {
 		return roleString;
 	}
 
-	/*
-	* Abstract methods.
-	* */
-
 	public abstract int[] payout();
 
 	public abstract int bonusPayOut();

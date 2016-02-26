@@ -81,6 +81,7 @@ public class Actor implements Comparable<Actor>{
     public void setRoleStatus(boolean status) {
         this.roleStatus = status;
     }
+
     public boolean getRoleStatus(){
         return roleStatus;
     }

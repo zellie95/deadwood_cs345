@@ -20,6 +20,29 @@ public class SceneRoom extends Room {
 		return extraRoles;
 	}
 
+	// Returns valid extra roles based on current actor's rank.
+	public ArrayList<Role> getValidExtras(Actor curr) {
+		ArrayList<Role> roles = new ArrayList<>();
+		for (ExtraRole e : this.getExtraRoles()) {
+			if (e.getRank() <= curr.getRank() && !e.isOccupied()) {
+				roles.add(e);
+			}
+		}
+		return roles;
+	}
+
+	// Returns valid starring roles based on current actor's rank.
+	public ArrayList<Role> getValidStars(Actor curr) {
+		ArrayList<Role> roles = new ArrayList<>();
+		for (StarringRole s : this.getSceneCard().getStarringRoles()) {
+			if (s.getRank() <= curr.getRank() && !s.isOccupied()) {
+				roles.add(s);
+			}
+		}
+
+		return roles;
+	}
+
 	public void setShotCounter(int shotCounter) {
 		this.shotCounter = shotCounter;
 	}
@@ -94,14 +117,4 @@ public class SceneRoom extends Room {
 				"\n   Starring Roles: " + stars  +
 				'\n';
 	}
-
-	//	public int removeShotCounters(){
-//		if (shotCounters > 0){
-//			shotCounters = shotCounters - 1;
-//		}
-//		else{
-//
-//		}
-//
-//	}
 }
